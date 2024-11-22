@@ -1,0 +1,19 @@
+<!-- templates/patient_nurse_comments.html -->
+{% extends 'base.html' %}
+{% block title %}Nurses' Comments{% endblock %}
+{% block content %}
+<h2>Nurses' Comments</h2>
+{% if comments %}
+    <ul>
+        {% for comment in comments %}
+            <li>
+                <strong>Date:</strong> {{ comment.created_at.strftime('%Y-%m-%d') }}<br>
+                <strong>Comment:</strong> {{ comment.comment }}<br>
+                <strong>Nurse:</strong> {{ comment.author.username }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No comments found.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,13 @@
+<!-- templates/index.html -->
+{% extends 'base.html' %}
+{% block title %}Home - Healthcare App{% endblock %}
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to the Healthcare App</h1>
+    <p class="lead">A secure platform for patients, nurses, and doctors.</p>
+    <hr class="my-4">
+    <p>Please log in or register to continue.</p>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('login') }}" role="button">Login</a>
+    <a class="btn btn-secondary btn-lg" href="{{ url_for('register') }}" role="button">Register</a>
+</div>
+{% endblock %}

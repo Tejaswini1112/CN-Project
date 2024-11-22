@@ -1,0 +1,10 @@
+<!-- templates/nurse_dashboard.html -->
+{% extends 'base.html' %}
+{% block title %}Nurse Dashboard{% endblock %}
+{% block content %}
+<h2>Welcome, Nurse {{ current_user.username }}</h2>
+<p>This is your nurse dashboard.</p>
+<ul>
+    <li><a href="{{ url_for('nurse_search_patients') }}">Search Patients</a></li>
+</ul>
+{% endblock %}

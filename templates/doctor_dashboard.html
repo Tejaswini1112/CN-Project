@@ -1,0 +1,10 @@
+<!-- templates/doctor_dashboard.html -->
+{% extends 'base.html' %}
+{% block title %}Doctor Dashboard{% endblock %}
+{% block content %}
+<h2>Welcome, Dr. {{ current_user.username }}</h2>
+<p>This is your doctor dashboard.</p>
+<ul>
+    <li><a href="{{ url_for('search_patients') }}">Search Patients</a></li>
+</ul>
+{% endblock %}
