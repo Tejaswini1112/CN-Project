@@ -1,0 +1,19 @@
+<!-- templates/patient_prescriptions.html -->
+{% extends 'base.html' %}
+{% block title %}Your Prescriptions{% endblock %}
+{% block content %}
+<h2>Your Prescriptions</h2>
+{% if prescriptions %}
+    <ul>
+        {% for prescription in prescriptions %}
+            <li>
+                <strong>Date:</strong> {{ prescription.created_at.strftime('%Y-%m-%d') }}<br>
+                <strong>Prescription:</strong> {{ prescription.prescription }}<br>
+                <strong>Doctor:</strong> {{ prescription.doctor.username }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No prescriptions found.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,57 @@
+<!-- templates/doctor_view_patient.html -->
+{% extends 'base.html' %}
+{% block title %}View Patient{% endblock %}
+{% block content %}
+<h2>Patient: {{ user.username }}</h2>
+<p><strong>Age:</strong> {{ patient_data.age }}</p>
+<p><strong>Height:</strong> {{ patient_data.height }} cm</p>
+<p><strong>Weight:</strong> {{ patient_data.weight }} kg</p>
+<p><strong>Sex:</strong> {{ patient_data.sex }}</p>
+
+<h3>Health Data</h3>
+{% if health_data %}
+    <ul>
+        {% for data in health_data %}
+            <li>
+                <strong>Date:</strong> {{ data.created_at.strftime('%Y-%m-%d') }}<br>
+                <strong>Symptoms:</strong> {{ data.symptoms }}<br>
+                <strong>File:</strong> <a href="{{ url_for('uploaded_file', filename=data.file_path) }}">Download</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No health data found.</p>
+{% endif %}
+
+<h3>Doctors' Comments</h3>
+{% if comments %}
+    <ul>
+        {% for comment in comments %}
+            <li>
+                <strong>Date:</strong> {{ comment.created_at.strftime('%Y-%m-%d') }}<br>
+                <strong>Comment:</strong> {{ comment.comment }}<br>
+                <strong>Author:</strong> {{ comment.author.username }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No comments found.</p>
+{% endif %}
+
+<h3>Prescriptions</h3>
+{% if prescriptions %}
+    <ul>
+        {% for prescription in prescriptions %}
+            <li>
+                <strong>Date:</strong> {{ prescription.created_at.strftime('%Y-%m-%d') }}<br>
+                <strong>Prescription:</strong> {{ prescription.prescription }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No prescriptions found.</p>
+{% endif %}
+
+<a href="{{ url_for('doctor_add_comment', patient_id=user.id) }}" class="btn btn-primary">Add Comment</a>
+<a href="{{ url_for('doctor_add_prescription', patient_id=user.id) }}" class="btn btn-secondary">Add Prescription</a>
+{% endblock %}

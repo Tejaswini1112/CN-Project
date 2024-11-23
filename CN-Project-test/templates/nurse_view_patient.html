@@ -1,0 +1,65 @@
+<!-- templates/nurse_view_patient.html -->
+ {% extends 'base.html' %}
+
+{% block title %}View Patient{% endblock %}
+
+{% block content %}
+<h2>Patient: {{ user.username }}</h2>
+
+<p><strong>Address:</strong> {{ decrypted_address if decrypted_address else "N/A" }}</p>
+<p><strong>Age:</strong> {{ patient.age }}</p>
+<p><strong>Height:</strong> {{ patient.height }} cm</p>
+<p><strong>Weight:</strong> {{ patient.weight }} kg</p>
+<p><strong>Sex:</strong> {{ patient.sex }}</p>
+
+<h3>Doctors' Comments</h3>
+{% if comments %}
+    <ul>
+        {% for comment in comments %}
+            {% if comment.role == 'doctor' %}
+                <li>
+                    <strong>Date:</strong> {{ comment.created_at.strftime('%Y-%m-%d') }}<br>
+                    <strong>Comment:</strong> {{ comment.comment }}<br>
+                    <strong>Doctor:</strong> {{ comment.author.username }}
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No doctors' comments found.</p>
+{% endif %}
+
+<h3>Prescriptions</h3>
+{% if prescriptions %}
+    <ul>
+        {% for prescription in prescriptions %}
+            <li>
+                <strong>Date:</strong> {{ prescription.created_at.strftime('%Y-%m-%d') }}<br>
+                <strong>Prescription:</strong> {{ prescription.prescription }}<br>
+                <strong>Doctor:</strong> {{ prescription.doctor.username }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No prescriptions found.</p>
+{% endif %}
+
+<h3>Nurses' Comments</h3>
+{% if comments %}
+    <ul>
+        {% for comment in comments %}
+            {% if comment.role == 'nurse' %}
+                <li>
+                    <strong>Date:</strong> {{ comment.created_at.strftime('%Y-%m-%d') }}<br>
+                    <strong>Comment:</strong> {{ comment.comment }}<br>
+                    <strong>Nurse:</strong> {{ comment.author.username }}
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No nurses' comments found.</p>
+{% endif %}
+
+<a href="{{ url_for('nurse_add_comment', patient_id=user.id) }}" class="btn btn-primary">Add Comment</a>
+{% endblock %}

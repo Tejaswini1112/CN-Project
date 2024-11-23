@@ -1,0 +1,24 @@
+<!-- templates/doctor_search_patients.html -->
+{% extends 'base.html' %}
+{% block title %}Search Patients{% endblock %}
+{% block content %}
+<h2>Search Patients</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.search_query.label }} {{ form.search_query(class="form-control") }}
+    </div>
+    {{ form.submit(class="btn btn-primary") }}
+</form>
+{% if patients %}
+    <h3>Results:</h3>
+    <ul>
+        {% for patient in patients %}
+            <li>
+                {{ patient.username }} - {{ patient.email }}
+                <a href="{{ url_for('doctor_view_patient', patient_id=patient.id) }}">View Profile</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}
