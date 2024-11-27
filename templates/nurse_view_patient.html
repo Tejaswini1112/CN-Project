@@ -18,7 +18,7 @@
         {% for comment in comments %}
             {% if comment.role == 'doctor' %}
                 <li>
-                    <strong>Date:</strong> {{ comment.created_at.strftime('%Y-%m-%d') }}<br>
+                    <strong>Date & Time:</strong> {{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}<br>
                     <strong>Comment:</strong> {{ comment.comment }}<br>
                     <strong>Doctor:</strong> {{ comment.author.username }}
                 </li>
@@ -34,7 +34,7 @@
     <ul>
         {% for prescription in prescriptions %}
             <li>
-                <strong>Date:</strong> {{ prescription.created_at.strftime('%Y-%m-%d') }}<br>
+                <strong>Date & Time:</strong> {{ prescription.created_at.strftime('%Y-%m-%d %H:%M:%S') }}<br>
                 <strong>Prescription:</strong> {{ prescription.prescription }}<br>
                 <strong>Doctor:</strong> {{ prescription.doctor.username }}
             </li>
@@ -50,7 +50,7 @@
         {% for comment in comments %}
             {% if comment.role == 'nurse' %}
                 <li>
-                    <strong>Date:</strong> {{ comment.created_at.strftime('%Y-%m-%d') }}<br>
+                    <strong>Date & Time:</strong> {{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}<br>
                     <strong>Comment:</strong> {{ comment.comment }}<br>
                     <strong>Nurse:</strong> {{ comment.author.username }}
                 </li>

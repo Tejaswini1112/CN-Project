@@ -7,7 +7,7 @@
     <ul>
         {% for comment in comments %}
             <li>
-                <strong>Date:</strong> {{ comment.created_at.strftime('%Y-%m-%d') }}<br>
+                <strong>Date & Time:</strong> {{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}<br>
                 <strong>Comment:</strong> {{ comment.comment }}<br>
                 <strong>Nurse:</strong> {{ comment.author.username }}
             </li>

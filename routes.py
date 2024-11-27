@@ -116,6 +116,72 @@ def patient_profile():
 
     return render_template('patient_profile.html', patient=patient, form=form)
 
+@app.route('/patient/patient_view_health_data', methods=['GET', 'POST'])
+@login_required
+@role_required('patient')
+def patient_view_health_data():
+    health_records = HealthData.query.filter_by(patient_id=current_user.id).all()
+    return render_template('patient_view_health_data.html', health_records=health_records)
+
+@app.route('/patient/modify_health_data/<int:record_id>', methods=['POST'])
+@login_required
+@role_required('patient')
+def modify_health_data(record_id):
+    record = HealthData.query.filter_by(id=record_id, patient_id=current_user.id).first()
+    if not record:
+        abort(404)
+    record.symptoms = request.form.get('symptoms')
+    db.session.commit()
+    flash('Health data updated successfully.', 'success')
+    return redirect(url_for('patient_view_health_data'))
+
+@app.route('/patient/delete_health_file/<int:record_id>', methods=['POST'])
+@login_required
+@role_required('patient')
+def delete_health_file(record_id):
+    record = HealthData.query.filter_by(id=record_id, patient_id=current_user.id).first()
+    if not record or not record.file_path:
+        flash('No file to delete.', 'danger')
+        return redirect(url_for('patient_view_health_data'))
+
+    # Delete the file from the filesystem
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], record.file_path)
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
+    # Remove the file path from the database record
+    record.file_path = None
+    db.session.commit()
+
+    flash('File deleted successfully.', 'success')
+    return redirect(url_for('patient_view_health_data'))
+
+@app.route('/patient/update_health_file/<int:record_id>', methods=['POST'])
+@login_required
+@role_required('patient')
+def update_health_file(record_id):
+    record = HealthData.query.filter_by(id=record_id, patient_id=current_user.id).first()
+    if not record:
+        abort(404)
+
+    file = request.files.get('new_file')
+    if file and allowed_file(file.filename):
+        # Save the new file
+        filename = secure_filename(file.filename)
+        unique_filename = f"{current_user.id}_{filename}"
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+        file.save(filepath)
+
+        # Update the database record
+        record.file_path = unique_filename
+        db.session.commit()
+
+        flash('File updated successfully.', 'success')
+    else:
+        flash('Invalid file type or no file uploaded.', 'danger')
+
+    return redirect(url_for('patient_view_health_data'))
+
 @app.route('/patient/submit_health_data', methods=['GET', 'POST'])
 @login_required
 @role_required('patient')
@@ -159,14 +225,25 @@ def view_nurse_comments():
 
 @app.route('/uploads/<filename>')
 @login_required
-@role_required('patient')
 def uploaded_file(filename):
-    # Ensure the file belongs to the current user
-    health_data = HealthData.query.filter_by(patient_id=current_user.id, file_path=filename).first()
-    if health_data:
-        return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    # Check if the current user is allowed to access the file
+    health_data = HealthData.query.filter_by(file_path=filename).first()
+    
+    # Ensure the file exists in the database
+    if not health_data:
+        abort(404)
+
+    # Check if the user is authorized
+    if current_user.role_name == 'patient' and health_data.patient_id == current_user.id:
+        pass  # Patient can access their own files
+    elif current_user.role_name == 'doctor':
+        pass  # Doctor can access any patient's files
     else:
+        # If the user is not authorized (e.g., nurse or other roles)
         abort(403)
+
+    # Return the file for download
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 # Doctor Routes
 @app.route('/doctor_dashboard')

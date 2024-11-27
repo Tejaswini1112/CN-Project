@@ -13,9 +13,14 @@
     <ul>
         {% for data in health_data %}
             <li>
-                <strong>Date:</strong> {{ data.created_at.strftime('%Y-%m-%d') }}<br>
+                <strong>Date & Time:</strong> {{ data.created_at.strftime('%Y-%m-%d %H:%M:%S') }}<br>
                 <strong>Symptoms:</strong> {{ data.symptoms }}<br>
-                <strong>File:</strong> <a href="{{ url_for('uploaded_file', filename=data.file_path) }}">Download</a>
+                {% if data.file_path %}
+                    <strong>File:</strong> 
+                    <a href="{{ url_for('uploaded_file', filename=data.file_path) }}">Download</a>
+                {% else %}
+                    <strong>File:</strong> No file uploaded
+                {% endif %}
             </li>
         {% endfor %}
     </ul>
@@ -28,7 +33,7 @@
     <ul>
         {% for comment in comments %}
             <li>
-                <strong>Date:</strong> {{ comment.created_at.strftime('%Y-%m-%d') }}<br>
+                <strong>Date & Time:</strong> {{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}<br>
                 <strong>Comment:</strong> {{ comment.comment }}<br>
                 <strong>Author:</strong> {{ comment.author.username }}
             </li>
@@ -43,7 +48,7 @@
     <ul>
         {% for prescription in prescriptions %}
             <li>
-                <strong>Date:</strong> {{ prescription.created_at.strftime('%Y-%m-%d') }}<br>
+                <strong>Date & Time:</strong> {{ prescription.created_at.strftime('%Y-%m-%d %H:%M:%S') }}<br>
                 <strong>Prescription:</strong> {{ prescription.prescription }}
             </li>
         {% endfor %}
