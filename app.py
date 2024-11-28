@@ -13,6 +13,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 db = SQLAlchemy(app)
+
 migrate = Migrate(app, db)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'  # Redirect to 'login' when @login_required fails
